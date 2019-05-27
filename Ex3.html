@@ -1,0 +1,163 @@
+<html>
+
+<head>
+    <script>   
+
+        //users = [{departmentId, username, point}]; 
+        //departments=[{id,code,name,companyId}]; 
+        //companies =[{id, code, name}]
+
+
+        function randomCompany() {
+            var companiesInp = [];
+            for (var i = 0; i < 2; i++) {
+
+                var company = { id: ("CompanyID0" + i), code: ("CompanyCode00" + i), name: ("ComnanyName" + i) };
+                companiesInp.push(company);
+            }
+            return companiesInp;
+        }
+
+        //departments=[{id,code,name,companyId}]; 
+        function randomDepartment(companies) {
+            var departmentsInp = [];
+            
+            for (var i = 0; i < 5; i++) {
+                var indexCompanyRandom = Math.floor(Math.random() * (companies.length));
+                var department = { id: ("DepaID" + i), code: ("DepaCode00" + i), name: ("DepartmentName" + i), companyId: companies[indexCompanyRandom].id };
+                departmentsInp.push(department);
+              //  document.write("depart random: id - code - name :       " + department.id + "\t" + department.code +  "\t" + department.name +"\t" + department.coId);
+              //  document.write('<br/>');
+            }
+            document.write('<br/>');
+            return departmentsInp;
+        }
+
+        //users = [{departmentId, username, point}]; 
+        function randomUsers(departments) {
+            var usersInp = [];
+            
+            for (var i = 0; i < 12; i++) {
+                var indexDepartmentRandom = Math.floor(Math.random() * (departments.length));
+                var user = { departmentId: departments[indexDepartmentRandom].id, username: ("NameUser" + i), point: ((i * i) % 5) }; //point = fuction (i *i)/5
+                usersInp.push(user);
+              //  document.write("user random: deId - name - point :       " + user.depaID + "\t" + user.name + "\t" + user.point);
+              //  document.write('<br/>');
+
+            }
+            
+            return usersInp;
+        }
+
+
+
+        //get record: radom company table data
+        //[{companyCode,companyName,
+        //departments:[{departmentCode,departmentName,
+        //users:[{username,point}]}]}]
+        //from:-------------
+        //users = [{departmentId, username, point}]; 
+        //departments=[{id,code,name,companyId}]; 
+        //companies =[{id, code, name}]
+
+        function getData(companies, departments, users) {                      
+            var compaTable = [];
+            for (var i = 0; i < companies.length; i++) {
+                var thisCompanyId = companies[i].id;
+
+                //collecte (depart table) with thisCompanyId
+                var depaTable = [];
+                for (var j = 0; j < departments.length; j++) {
+
+                    if (departments[j].companyId == thisCompanyId) {
+                         //collecte (depart table) depart[j].id
+                        var thisDepartId = departments[j].id;
+                        var userTable = [];
+
+                        for (var k = 0; k < users.length; k++) {
+                            if (users[k].departmentId == thisDepartId) {
+                                var userRecord = { username: users[k].username, point: users[k].point } //properties'name
+                                userTable.push(userRecord);
+                            }
+                        }
+                        //userRecord.sort(compare);
+                        var depaRecord = { departmentCode: departments[j].code, departmentName: departments[j].name, userRecords: userTable }; //properties'name                      
+                        depaTable.push(depaRecord);
+                    }
+                }
+               
+                var compaRecord = { companyCode: companies[i].code, companyName: companies[i].name, depaReCords: depaTable }; //properties'name
+                compaTable.push(compaRecord);
+
+            }          
+            return compaTable;
+        }
+
+//displayCompanyTable
+//[{companyCode,companyName, depaReCords
+//departments:[{departmentCode,departmentName, userRecords
+//users:[{username,point}]}]}]
+        //document.write('');
+        function displayCompanyTable(companyTable) {
+            document.writeln("-------------Company Information--------------");
+            
+            document.write('<br/><br/>');
+            document.write("<table style= \"width:1000px \"> <tr>    <th>Company Code</th>    <th>Company Name</th>     <th>Department Code</th>     <th>Department Name</th>     <th>User Name</th>     <th>Point</th>    	</tr>");          
+            
+            document.write('</tr>');
+            document.write('');
+            for (var i = 0; i < companyTable.length; i++) {
+
+                document.writeln("<tr> <th> " + companyTable[i].companyCode + "</th> <th>" + companyTable[i].companyName + "</th> ");             
+                var thisDepartRecord = companyTable[i].depaReCords;            
+
+                for (var j = 0; j < thisDepartRecord.length; j++) {
+                    document.writeln("<th>" + thisDepartRecord[j].departmentCode + "</th> <th>"+ thisDepartRecord[j].departmentName + "</th>");                   
+
+                    var thisUserRecord = thisDepartRecord[j].userRecords;             
+
+                    for (var k = 0; k < thisUserRecord.length; k++) {
+                        document.writeln("<th>" + thisUserRecord[k].username + "</th> <th>" + thisUserRecord[k].point + "</th>");
+                        document.write("</tr> <th></th>   <th></th>  <th></th>  <th></th> ");                   
+                    }
+                    document.write("</tr> <th></th>   <th></th>  ");
+
+                }          
+                
+                document.write('</tr>');
+            }
+            document.write('<table/>');
+        }
+
+        var companiesRd = randomCompany();
+        var departmentsRd = randomDepartment(companiesRd);
+        var usersRd = randomUsers(departmentsRd);
+
+
+        var compaTable1 = getData(companiesRd, departmentsRd, usersRd);
+        displayCompanyTable(compaTable1);
+
+    </script>
+</head>
+
+<body>
+    <script>
+//         Các em học cách sử dụng thành thạo git nhé.
+// Bài tập là: 
+// Bài 1: Clone đc repo này: https://github.com/maichitho/backend-spring 
+
+// Bài 2: 1. Tạo tài khoản github hoặc bitbucket hoặc bất cứ Repo online nào. 2. Tự tạo 1 repo cho mình. 3. Commit file được lên repo. 4. Sau đó clone repo đó sang 1 thư mục khác. Pull về và sửa một file nào đó. Rồi lại push lên server.
+
+// Bài 3: về Javascript. Anh có 03 mảng object: users = [{departmentId, username, point}]; departments=[{id,code,name,companyId}]; companies =[{id, code, name}]
+// Bài 3.1: Hãy hard code dữ liệu 03 mảng kia. Sau đó viết 01 hàm trả về 01 mảng dữ liệu theo cấu trúc như sau:
+// [{companyCode,companyName,departments:[{departmentCode,departmentName,users:[{username,point}]}]}]
+// Điều kiện là mảng con users phải được sắp xếp theo point tăng dần.
+
+// Bài 3.2: Hãy tạo dữ liệu random cho các mảng trên với quan hệ như trong Database (Có nghĩa là dữ liệu random nhưng mà các quan hê ID company và ID department phải đúng, không tồn tại các ID mà không có trong danh mục). Và cho chạy qua hàm đã tạo ở 3.1 để ra kết quả.
+
+// Ai có vấn đề gì thắc mắc hoặc làm chưa được thì tối anh giải thích thêm nhé.
+
+    </script>
+</body>
+
+</html>
